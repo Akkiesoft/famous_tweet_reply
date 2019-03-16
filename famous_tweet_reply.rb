@@ -22,8 +22,16 @@ Plugin.create(:famous_tweet_reply) do
       "RTやばいえぐいな！！笑",
       "お前有名人じゃんwwwwwwwwwwwwww"
     ]
-    id=message.idname
-    message.post(:message => "@#{id} #{str.sample}")
+    id = message.user.idname
+    msg = "@#{id} #{str.sample}"
+    world, = Plugin.filtering(:world_current, nil)
+    if world.slug.include?("worldon")
+      msg = msg.gsub(/リツイート/, "ブースト")
+      msg = msg.gsub(/ツイート/, "トゥート")
+      msg = msg.gsub(/いいね/, "ふぁぼ")
+      msg = msg.gsub(/RT/, "BT")
+    end
+    compose(world, message, body: msg)
   end
 
 end
